@@ -6,24 +6,30 @@ const AboutUs = () => {
     <>
       <Row>
         <Col>
-          <Card>
-            <Card.Header as="h2">About Us</Card.Header>
+          <Card className="shadow-sm">
+            <Card.Header as="h2" className="bg-primary text-white">About Cover2Cover</Card.Header>
             <Card.Body>
-              <Card.Title>AI-Driven Student Performance Analysis System</Card.Title>
+              <Card.Title>AI-Powered Book Discovery Platform</Card.Title>
               <Card.Text>
-                Our system integrates PAT (Periodic Assessment Test), SAT (Scholastic Assessment Test), 
-                and Attendance data to provide predictive analysis of students' performance. 
-                This helps educators, parents, and administrators make data-driven decisions 
-                to improve educational outcomes.
+                Cover2Cover is an intelligent recommendation system that helps readers find their next favorite book 
+                using machine learning algorithms. By analyzing book metadata, user preferences, and similarity patterns, 
+                we deliver personalized suggestions tailored to individual tastes.
               </Card.Text>
               <Card.Text>
-                The system provides role-based access to different stakeholders including 
-                students, parents, school authorities, and various levels of administration.
+                Our system combines <strong>collaborative filtering</strong> (community preferences) and <strong>content-based filtering</strong> 
+                (book attributes) to generate accurate recommendations. Whether you're a student, book club member, 
+                or casual reader, we simplify your search for the perfect read.
               </Card.Text>
               <Card.Text>
-                Our mission is to leverage AI and data analytics to transform education 
-                by identifying at-risk students early and providing actionable insights 
-                to all stakeholders in the education ecosystem.
+                <strong>Key Features:</strong>
+                <ul>
+                  <li>Discover books similar to your favorites</li>
+                  <li>Explore trending titles with visual analytics</li>
+                  <li>Responsive design for seamless browsing</li>
+                </ul>
+              </Card.Text>
+              <Card.Text className="text-muted">
+                Built with React.js, Flask, and powered by Python's data science stack (Pandas, Scikit-learn, NLTK).
               </Card.Text>
             </Card.Body>
           </Card>

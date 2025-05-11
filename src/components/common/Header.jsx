@@ -1,62 +1,40 @@
-import React, { useState } from 'react';
-import { Navbar, Container, Button, Form, Offcanvas, } from 'react-bootstrap';
-import { 
-  House,
-  InfoCircle,
-  List,
-} from 'react-bootstrap-icons';
+import React from 'react'
+import { Link, redirect, useNavigate } from 'react-router-dom'
 
-const Header = ({darkMode}) => {
-  const [showSidebar, setShowSidebar] = useState(false);
-
-  const handleCloseSidebar = () => setShowSidebar(false);
-  const handleShowSidebar = () => setShowSidebar(true);
-
+export default function Header() {
+  const navigate=useNavigate()
   return (
-    <>
-      <Navbar bg={darkMode ? 'dark' : 'light'} variant={darkMode ? 'dark' : 'light'} expand="lg" sticky="top" className="shadow-sm">
-        <Container fluid>
-          {/* Sidebar Toggle Button */}
-          <Button 
-            variant="link" 
-            onClick={handleShowSidebar}
-            className="me-2 p-2"
-            aria-label="Toggle navigation"
-          >
-            <List size={24} />
-          </Button>
-
-          
-
-          <Navbar.Toggle aria-controls="navbarSearch" />
-
-          
-        </Container>
-      </Navbar>
-
-      {/* Sidebar Offcanvas */}
-      <Offcanvas show={showSidebar} onHide={handleCloseSidebar} placement="start">
-        <Offcanvas.Header closeButton>
-          
-        </Offcanvas.Header>
-        <Offcanvas.Body>
-          <nav className="nav flex-column">
-            <a className="nav-link d-flex align-items-center py-3" href="/">
-              <House className="me-2" /> Home
-            </a>
-            <a className="nav-link d-flex align-items-center py-3" href="/about">
-              <InfoCircle className="me-2" /> About
-            </a>
-            
-            <a className="nav-link d-flex align-items-center py-3" href="/recommend">
-              <i className="bi bi-currency-dollar me-2"></i> Recommend
-            </a>
+    <header className="p-3 bg-dark text-white">
+      <div className="container">
+        <div className="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+          <Link to={''} className="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
            
-          </nav>
-        </Offcanvas.Body>
-      </Offcanvas>
-    </>
-  );
-};
+          </Link>
 
-export default Header;
+          <ul className="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+            <li><Link to={'/'} className="nav-link px-2 text-secondary">Home</Link></li>
+            <li><Link to={'/recommend'} className="nav-link px-2 text-white">Recommend</Link></li>
+            <li><Link to={'/contact'} className="nav-link px-2 text-white">Contact</Link></li>
+            <li><Link to={'/about'} className="nav-link px-2 text-white">About</Link></li>
+            <li><Link to={'/'} className="nav-link px-2 text-white">New Release</Link></li>
+          </ul>
+
+          <form className="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
+            <input type="search" className="form-control form-control-dark" placeholder="Search..." aria-label="Search" />
+          </form>
+
+          <div className="text-end">
+            <button type="button" className="btn btn-outline-light me-2" onClick={()=>{
+              navigate('/login')
+            }}>Login</button>
+            <button type="button" className="btn btn-warning"
+            onClick={()=>{
+             navigate('/register')
+            }}
+            >Sign-up</button>
+          </div>
+        </div>
+      </div>
+    </header>
+  )
+}
