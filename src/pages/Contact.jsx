@@ -24,7 +24,7 @@ export default function Contact() {
                                     //  style="--bsb-overlay-opacity: 0.7; background-image: url('./assets/img/contact-img-1.webp');"
                                     style={{
     "--bsb-overlay-opacity": "0.7", // Custom CSS variable (must be a string)
-    backgroundImage: "url('./assets/img/contact-img-1.webp')", // camelCase
+    backgroundImage: "url('https://tse1.mm.bing.net/th/id/OIP.jEzPKIUcRD2LQGrNF-WxHgHaHa?pid=Api&P=0&h=180')", // camelCase
   }}  >
                                         <div className="row align-items-lg-center justify-content-center h-100">
                                             <div className="col-11 col-xl-10">

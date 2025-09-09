@@ -1,35 +1,43 @@
+import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Header from './components/common/Header';
+import Navbar from './components/common/Navbar';
 import Home from './pages/Home';
-import About from './pages/About';
+import Login from './auth/Login';
+import SignUp from './auth/Signup';
+import Dashboard from './components/Dashboard';
 import Recommend from './pages/Recommend';
-import Login from './auth/Login.jsx'
-import Signup from './auth/Signup.jsx'
-import { Container } from 'react-bootstrap';
-import Footer from './components/common/Footer.jsx';
-import Contact from './pages/Contact.jsx';
+import ProtectedRoute from './components/ProtectedRoutes';
+import './App.css';
 
 function App() {
-    return (
-        <Router>
-            <div>
-                <Header />
-                <Container fluid className="px-4" style={{ minHeight: '90vh' }}>
-                    <Routes>
-                        {/* Public Routes */}
-                        <Route path="/" element={<Home />} />
-                        <Route path="/recommend" element={<Recommend />} />
-                        <Route path="/register" element={<Signup />} />
-                        <Route path="/about" element={<About />} />
-                        <Route path="/contact" element={<Contact />} />
-                        <Route path="/login" element={<Login />} />
-                      
-                    </Routes>
-                </Container>
-                <Footer />
-            </div>
-        </Router>
-    );
+  return (
+    <Router>
+      <div className="App">
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<SignUp />} />
+          <Route 
+            path="/dashboard" 
+            element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/recommend" 
+            element={
+              <ProtectedRoute>
+                <Recommend />
+              </ProtectedRoute>
+            } 
+          />
+        </Routes>
+      </div>
+    </Router>
+  );
 }
 
 export default App;
