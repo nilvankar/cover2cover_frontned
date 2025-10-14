@@ -2,7 +2,16 @@ import React from 'react'
 import { Link, redirect, useNavigate } from 'react-router-dom'
 
 export default function Header() {
-  const navigate=useNavigate()
+//   useEffect(() => {
+//   axios.get("http://127.0.0.1:5000/api/auth/check_session", { withCredentials: true })
+//     .then(res => {
+//       if (res.data.authenticated) {
+//         setUser(res.data.user);
+//       }
+//     });
+// }, []);
+
+  // const navigate=useNavigate()
   return (
     <header className="p-3 bg-dark text-white">
       <div className="container">

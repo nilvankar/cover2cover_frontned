@@ -1,77 +1,85 @@
-import React from 'react'
+import React, { useState } from "react";
+import axios from "axios";
+import { useNavigate, Link } from "react-router-dom";
+import { Form, Button, Card, Alert } from "react-bootstrap";
 
-export default function Login() {
+const Login = () => {
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState({ username: "", password: "" });
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+    setLoading(true);
+
+    try {
+      const res = await axios.post(
+        "http://127.0.0.1:5000/api/auth/login",
+        formData,
+        { withCredentials: true }
+      );
+
+      if (res.data.status === "success") {
+        navigate("/recommend"); // redirect to recommendation page
+      } else {
+        setError(res.data.message || "Login failed");
+      }
+    } catch (err) {
+      setError(err.response?.data?.message || "Something went wrong");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <section className="vh-100" 
-    // style="background-color: #9A616D;"
-    style={{'backgroundColor':"#9A616D"}}
-    >
-  <div className="container py-5 h-100">
-    <div className="row d-flex justify-content-center align-items-center h-100">
-      <div className="col col-xl-10">
-        <div className="card" 
-        // style="border-radius: 1rem;"
-        style={{'borderRadius':"1rem"}}
-        >
-          <div className="row g-0">
-            <div className="col-md-6 col-lg-5 d-none d-md-block">
-              <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/img1.webp"
-                alt="login form" className="img-fluid" 
-                // style="border-radius: 1rem 0 0 1rem;"
-                style={{borderRadius:"1rem 0 0 1rem"}}
-                 />
-            </div>
-            <div className="col-md-6 col-lg-7 d-flex align-items-center">
-              <div className="card-body p-4 p-lg-5 text-black">
+    <Card className="mx-auto mt-5 shadow" style={{ maxWidth: "400px" }}>
+      <Card.Body>
+        <h3 className="text-center mb-3">Login</h3>
+        {error && <Alert variant="danger">{error}</Alert>}
+        <Form onSubmit={handleSubmit}>
+          <Form.Group className="mb-3">
+            <Form.Label>Username</Form.Label>
+            <Form.Control
+              type="text"
+              name="username"
+              placeholder="Enter username"
+              value={formData.username}
+              onChange={handleChange}
+              required
+            />
+          </Form.Group>
 
-                <form>
+          <Form.Group className="mb-3">
+            <Form.Label>Password</Form.Label>
+            <Form.Control
+              type="password"
+              name="password"
+              placeholder="Enter password"
+              value={formData.password}
+              onChange={handleChange}
+              required
+            />
+          </Form.Group>
 
-                  <div className="d-flex align-items-center mb-3 pb-1">
-                    <i className="fas fa-cubes fa-2x me-3"
-                    //  style="color: #ff6219;"
-                    style={{color:"#ff6219"}}
-                    ></i>
-                    <span className="h1 fw-bold mb-0">Logo</span>
-                  </div>
+          <Button type="submit" variant="primary" className="w-100" disabled={loading}>
+            {loading ? "Logging in..." : "Login"}
+          </Button>
+        </Form>
 
-                  <h5 className="fw-normal mb-3 pb-3"
-                  //  style="letter-spacing: 1px;"
-                  style={{"letterSpacing":"1px"}}
-                  >Sign into your account</h5>
-
-                  <div data-mdb-input-init className="form-outline mb-4">
-                    <input type="email" id="form2Example17" className="form-control form-control-lg" />
-                    <label className="form-label" htmlFor="form2Example17">Email address</label>
-                  </div>
-
-                  <div data-mdb-input-init className="form-outline mb-4">
-                    <input type="password" id="form2Example27" className="form-control form-control-lg" />
-                    <label className="form-label" htmlFor="form2Example27">Password</label>
-                  </div>
-
-                  <div className="pt-1 mb-4">
-                    <button data-mdb-button-init data-mdb-ripple-init className="btn btn-dark btn-lg btn-block" type="button">Login</button>
-                  </div>
-
-                  <a className="small text-muted" href="#!">Forgot password?</a>
-                  <p className="mb-5 pb-lg-2" 
-                  // style="color: #393f81;"
-                  style={{"color":" #393f81"}}
-                  >Don't have an account? <a href="#!"
-                      // style="color: #393f81;"
-                      style={{color:"#393f81"}}
-                      >Register here</a></p>
-                  <a href="#!" className="small text-muted">Terms of use.</a>
-                  <a href="#!" className="small text-muted">Privacy policy</a>
-                </form>
-
-              </div>
-            </div>
-          </div>
+        <div className="mt-3 text-center">
+          <small>
+            Don’t have an account? <Link to="/register">Sign up here</Link>
+          </small>
         </div>
-      </div>
-    </div>
-  </div>
-</section>
-  )
-}
+      </Card.Body>
+    </Card>
+  );
+};
+
+export default Login;
