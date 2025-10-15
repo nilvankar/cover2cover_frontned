@@ -10,7 +10,8 @@ import Footer from './components/common/Footer.jsx';
 import Contact from './pages/Contact.jsx';
 import ProtectedRoute from './auth/ProtectedRoute.jsx';
 import { AuthProvider } from './context/AuthContext.jsx';
-
+import Profile from './pages/Profile.jsx';
+import ForgotPassword from './auth/ForgotPassword.jsx';
 function App() {
   return (
     <AuthProvider>
@@ -35,6 +36,16 @@ function App() {
                   </ProtectedRoute>
                 }
               />
+              <Route
+                path="/profile"
+                element={
+                  <ProtectedRoute>
+                    <Profile />
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route path="/forgot-password" element={<ForgotPassword />} />
             </Routes>
           </Container>
           <Footer />
