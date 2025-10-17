@@ -12,6 +12,7 @@ import ProtectedRoute from './auth/ProtectedRoute.jsx';
 import { AuthProvider } from './context/AuthContext.jsx';
 import Profile from './pages/Profile.jsx';
 import ForgotPassword from './auth/ForgotPassword.jsx';
+import WhatsNew from './pages/WhatsNew.jsx';  
 function App() {
   return (
     <AuthProvider>
@@ -46,6 +47,9 @@ function App() {
               />
 
               <Route path="/forgot-password" element={<ForgotPassword />} />
+              
+
+              <Route path="/whats-new" element={<WhatsNew />} />
             </Routes>
           </Container>
           <Footer />

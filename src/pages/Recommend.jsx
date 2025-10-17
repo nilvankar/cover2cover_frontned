@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { motion } from 'framer-motion';
-import { 
-  Form, 
-  Button, 
-  Card, 
-  Row, 
-  Col, 
-  Spinner, 
-  Alert, 
+import {
+  Form,
+  Button,
+  Card,
+  Row,
+  Col,
+  Spinner,
+  Alert,
   Container,
   Badge,
   InputGroup,
@@ -45,26 +45,27 @@ const Recommend = () => {
 
     try {
       const response = await axios.get(
-        `http://127.0.0.1:5000/recommend_books?title=${encodeURIComponent(bookTitle)}`
+        `http://127.0.0.1:5000/recommend_books?title=${encodeURIComponent(bookTitle)}`,
+        { withCredentials: true } // 👈 add this line
       );
 
       if (response.data.status === 'success') {
         setRecommendations(response.data.recommendations);
-        
+
         // Update recent searches
         const updatedSearches = [
           bookTitle,
           ...recentSearches.filter(search => search !== bookTitle)
         ].slice(0, 5);
-        
+
         setRecentSearches(updatedSearches);
         localStorage.setItem('recentBookSearches', JSON.stringify(updatedSearches));
       } else {
         setError(response.data.message || 'No recommendations found for this book.');
       }
     } catch (err) {
-      setError(err.response?.data?.message || 
-               'Failed to fetch recommendations. Please try again later.');
+      setError(err.response?.data?.message ||
+        'Failed to fetch recommendations. Please try again later.');
       console.error('Recommendation error:', err);
     } finally {
       setLoading(false);
@@ -80,7 +81,7 @@ const Recommend = () => {
     const fullStars = Math.floor(score);
     const hasHalfStar = score % 1 >= 0.5;
     const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
-    
+
     return (
       <div className="d-flex align-items-center">
         {[...Array(fullStars)].map((_, i) => (
@@ -97,7 +98,7 @@ const Recommend = () => {
 
   return (
     <Container className="py-4">
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
@@ -126,9 +127,9 @@ const Recommend = () => {
               placeholder="e.g., The Da Vinci Code"
               required
             />
-            <Button 
-              variant="primary" 
-              type="submit" 
+            <Button
+              variant="primary"
+              type="submit"
               disabled={loading || !bookTitle.trim()}
             >
               {loading ? (
@@ -147,7 +148,7 @@ const Recommend = () => {
               <div className="p-2">
                 <small className="text-muted">Recent searches:</small>
                 {recentSearches.map((search, idx) => (
-                  <div 
+                  <div
                     key={idx}
                     className="p-2 hover-bg cursor-pointer"
                     onClick={() => handleRecentSearchClick(search)}
@@ -162,9 +163,9 @@ const Recommend = () => {
       </Form>
 
       {error && (
-        <Alert 
-          variant="danger" 
-          dismissible 
+        <Alert
+          variant="danger"
+          dismissible
           onClose={() => setError('')}
           className="mb-4"
         >
@@ -242,9 +243,9 @@ const Recommend = () => {
                       </div>
                     </Card.Body>
                     <Card.Footer className="bg-white border-0">
-                      <Button 
-                        variant="outline-primary" 
-                        size="sm" 
+                      <Button
+                        variant="outline-primary"
+                        size="sm"
                         className="w-100"
                         onClick={() => window.open(`https://www.google.com/search?q=${encodeURIComponent(book.title + ' ' + book.author)}`, '_blank')}
                       >
@@ -261,10 +262,10 @@ const Recommend = () => {
 
       {!loading && !recommendations.length && !error && (
         <div className="text-center py-5">
-          <img 
-            src="https://cdn-icons-png.flaticon.com/512/2748/2748558.png" 
-            alt="Search books" 
-            style={{ width: '120px', opacity: 0.5 }} 
+          <img
+            src="https://cdn-icons-png.flaticon.com/512/2748/2748558.png"
+            alt="Search books"
+            style={{ width: '120px', opacity: 0.5 }}
             className="mb-3"
           />
           <h5 className="text-muted">Search for book recommendations</h5>

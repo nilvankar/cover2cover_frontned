@@ -3,7 +3,7 @@ import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 import { Form, Button, Card, Alert } from "react-bootstrap";
 import { AuthContext } from "../context/AuthContext";
-import login from '../context/AuthContext'
+
 const Login = () => {
   const navigate = useNavigate();
   const { setUser } = useContext(AuthContext); // ✅ access context
@@ -28,13 +28,11 @@ const Login = () => {
       );
 
       if (res.data.status === "success") {
-        // Save session
-        login(res.data.user.username || formData.username);
-        navigate("/recommend");
+        setUser(res.data.user); // ✅ update AuthContext immediately
+        navigate("/recommend"); // ✅ redirect to protected route
       } else {
         setError(res.data.message || "Login failed");
       }
-
     } catch (err) {
       setError(err.response?.data?.message || "Something went wrong");
     } finally {
@@ -80,12 +78,6 @@ const Login = () => {
           >
             {loading ? "Logging in..." : "Login"}
           </Button>
-          <div className="mt-3 text-center">
-            <small>
-              <Link to="/forgot-password">Forgot password?</Link>
-            </small>
-          </div>
-
         </Form>
 
         <div className="mt-3 text-center">

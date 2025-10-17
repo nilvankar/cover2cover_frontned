@@ -1,33 +1,60 @@
-// src/components/common/Header.jsx
-import React from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext";
+import React, { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 export default function Header() {
   const navigate = useNavigate();
-  const { user, logout } = useAuth();
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [username, setUsername] = useState("");
+
+  useEffect(() => {
+    // Check session from backend
+    const checkSession = async () => {
+      try {
+        const res = await axios.get("http://127.0.0.1:5000/api/auth/check_session", {
+          withCredentials: true,
+        });
+        if (res.data.authenticated) {
+          setIsAuthenticated(true);
+          setUsername(res.data.user);
+        } else {
+          setIsAuthenticated(false);
+        }
+      } catch {
+        setIsAuthenticated(false);
+      }
+    };
+    checkSession();
+  }, []);
 
   const handleLogout = async () => {
-    await logout();
-    navigate("/login");
+    try {
+      await axios.post("http://127.0.0.1:5000/api/auth/logout", {}, { withCredentials: true });
+      localStorage.removeItem("auth");
+      setIsAuthenticated(false);
+      navigate("/login");
+    } catch (err) {
+      console.error("Logout failed", err);
+    }
   };
 
   return (
     <header className="p-3 bg-dark text-white">
       <div className="container">
-        <div className="d-flex flex-wrap align-items-center justify-content-between">
-          <Link to="/" className="text-white text-decoration-none fs-4">
-            MyApp
+        <div className="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+          <Link to="/" className="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
+            <strong className="fs-4">MyApp</strong>
           </Link>
 
-          <ul className="nav me-auto mb-2 justify-content-center mb-md-0">
+          <ul className="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
             <li><Link to="/" className="nav-link px-2 text-secondary">Home</Link></li>
             <li><Link to="/recommend" className="nav-link px-2 text-white">Recommend</Link></li>
+            <li><Link to="/whats-new" className="nav-link px-2 text-white">What's New</Link></li> {/* 🆕 Added */}
             <li><Link to="/contact" className="nav-link px-2 text-white">Contact</Link></li>
             <li><Link to="/about" className="nav-link px-2 text-white">About</Link></li>
           </ul>
 
-          <form className="col-lg-auto mb-3 mb-lg-0 me-3">
+          <form className="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
             <input
               type="search"
               className="form-control form-control-dark"
@@ -37,16 +64,19 @@ export default function Header() {
           </form>
 
           <div className="text-end">
-            {user ? (
+            {isAuthenticated ? (
               <>
-                <span className="me-3">Hello, {user.username}</span>
+                <span className="me-3">Hello, {username}</span>
                 <button
                   className="btn btn-outline-light me-2"
-                  onClick={() => navigate("/profile")}
+                  onClick={() => navigate('/profile')}
                 >
                   Profile
                 </button>
-                <button className="btn btn-danger" onClick={handleLogout}>
+                <button
+                  className="btn btn-danger"
+                  onClick={handleLogout}
+                >
                   Logout
                 </button>
               </>
@@ -55,14 +85,14 @@ export default function Header() {
                 <button
                   type="button"
                   className="btn btn-outline-light me-2"
-                  onClick={() => navigate("/login")}
+                  onClick={() => navigate('/login')}
                 >
                   Login
                 </button>
                 <button
                   type="button"
                   className="btn btn-warning"
-                  onClick={() => navigate("/register")}
+                  onClick={() => navigate('/register')}
                 >
                   Sign-up
                 </button>
